@@ -1,0 +1,8 @@
+alias add='perl add_info.pl'
+alias get='perl get_tag.pl'
+alias getall='perl get_all.pl'
+alias getid='perl get_tag_by_id.pl'
+alias del='perl del_id.pl'
+alias mod='perl modify_id.pl'
+alias modify='perl modify_id.pl'
+alias tags='perl get_tags.pl'

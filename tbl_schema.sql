@@ -1,0 +1,27 @@
+CREATE TABLE tbl_info (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT,
+  info TEXT,
+  user TEXT,
+  time_added TIMESTAMP
+  DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE tbl_tag (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  tag TEXT
+);
+
+CREATE TABLE tbl_info_tag_ref (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  info_id INTEGER,
+  tag_id INTEGER,  
+  time_added TIMESTAMP
+    DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(info_id) REFERENCES tbl_info(id),
+  FOREIGN KEY(tag_id) REFERENCES tbl_tag(id)
+);
+
+
+
+
