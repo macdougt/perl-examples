@@ -1,5 +1,5 @@
 # Need to add directory that this content is added to
-export dirInfo='/vagrant/dockerStuff/d_sqlite'
+export dirInfo='<directory that contains perl code>'
 alias add='perl -I $dirInfo $dirInfo/add_info.pl'
 alias get='perl -I $dirInfo $dirInfo/get_tag.pl'
 alias getall='perl -I $dirInfo $dirInfo/get_all.pl'
