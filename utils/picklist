@@ -1,0 +1,48 @@
+#!/usr/bin/env perl
+
+# Script that can be used in pipe and still take input
+# e.g. ls | picklist | grep t
+# This will create a numbered list of the current directory's
+# listing, the user will be prompted to choose an item from 
+# the list and the grep will return the item if there is a "t"
+# in the chosen item
+
+# List to be presented for user's choice
+my @list;
+
+# The following line allows piped input
+# Each line of input will be pushed to the list
+while (<>) {
+  my $curItem = $_;
+  chomp($curItem);
+  push(@list,$curItem);
+}
+
+# The user will be asked to choose an item from the list
+# and the result will be printed
+print &getPick(\@list);
+
+# Print an interactive choice from a given list
+sub getPick {
+   my $ra_list = shift;
+   if ($#{$ra_list} > 0) {
+        print STDERR "List:\n";
+        for (my $i=0; $i <= $#{$ra_list}; $i++) {
+           print STDERR ($i+1);
+           print STDERR ") $$ra_list[$i]\n";
+        }
+        print STDERR "Make your choice\n";
+        open TTY, '<', '/dev/tty';
+        my $choice = <TTY>;
+        close TTY;
+        if ($choice =~ /\d+/) {
+           return $$ra_list[$choice-1];
+        }
+   } elsif ($#{$ra_list} == 0) {
+        return $$ra_list[0];
+   } else {
+        print STDERR "No list\n";
+   }
+}
+
+
