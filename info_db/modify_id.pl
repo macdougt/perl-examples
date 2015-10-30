@@ -11,6 +11,7 @@
 use strict;
 use DBI;
 use config_t808;
+use db_utils;
 
 my $id_to_modify = shift;
 
@@ -97,7 +98,8 @@ if ($row) {
    unlink $filename;
    # Update the database
    if ($update_title && $title ne $new_title) {
-      $dbh->do("UPDATE tbl_info SET title = '$new_title' WHERE id = $id_to_modify");
+      my $new_input_title = &db_utils::escape_db_input($new_title);
+      $dbh->do("UPDATE tbl_info SET title = '$new_input_title' WHERE id = $id_to_modify");
       print "Updated title:\n\t$new_title\n\n";
    }
 
@@ -105,6 +107,8 @@ if ($row) {
       # Transform the info
       my $transform_new_info = $new_info;
       $new_info =~ s/\n/$config_t808::content_sep/g;
+      $new_info = &db_utils::escape_db_input($new_info);
+      print "UPDATE tbl_info SET info = '$new_info' WHERE id = $id_to_modify\n\n";
       $dbh->do("UPDATE tbl_info SET info = '$new_info' WHERE id = $id_to_modify");
       print "Updated info:\n\t$transform_new_info\n\n";
    }

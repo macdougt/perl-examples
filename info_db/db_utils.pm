@@ -7,7 +7,7 @@ sub escape_db_input() {
    # single quotes
    $input =~ s/'/''/g;
 
-
+   return $input;
 }
 
 1;

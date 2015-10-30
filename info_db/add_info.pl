@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 #
-# addInfo.pl
+# add_info
 # User can add infos to the database
 # The user will be prompted for a:
 #    - Title (one line)
@@ -15,8 +15,8 @@
 
 use strict;
 use DBI;
-
 use config_t808;
+use db_utils;
 
 my $sep = $/;
 
@@ -80,8 +80,12 @@ my $dbh = DBI->connect(
 
 #print "INSERT INTO tbl_info (title,info,user) VALUES ('$title','$content','$user')";
 
+# Modify data for special characters (e.g. single quotes => '')
+my $new_input_title = &db_utils::escape_db_input($title);
+my $new_input_info = &db_utils::escape_db_input($content);
+
 # Insert title, content and user into the info table
-$dbh->do("INSERT INTO tbl_info (title,info,user) VALUES ('$title','$content','$user')");
+$dbh->do("INSERT INTO tbl_info (title,info,user) VALUES ('$new_input_title','$new_input_info','$user')");
 
 # Get the insert number
 my $last_info_insert_id = $dbh->last_insert_id("","","","");
