@@ -1,0 +1,28 @@
+{
+"help":
+"rcsdiff -rREV1 -rREV2 file
+If given two revisions (-rREV1 -rREV2), compare those revisions.
+If given only one revision (-rREV), compare the working file with it.
+If given no revisions, compare the working file with the latest
+revision on the default branch.",
+"choices":
+[
+{
+"file":
+"ls RCS"
+},
+{
+"revision1":
+"rlog <file> | grep 'revision [0-9]' | awk '{print $2}'"
+},
+{
+"revision2":
+"rlog <file> | grep 'revision [0-9]' | awk '{print $2}'"
+}
+],
+"command":
+"rcsdiff -r<revision1> -r<revision2> <file>"
+}
+
+
+
