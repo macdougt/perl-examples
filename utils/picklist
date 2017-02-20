@@ -7,6 +7,18 @@
 # the list and the grep will return the item if there is a "t"
 # in the chosen item
 
+my $flags = shift;
+
+my $execute = 0;
+my $ask = 0;
+
+# cheap arg parse
+if ($flags =~ /--ask\b/) {
+   $ask = 1;
+} elsif ($flags =~ /-e\b/) {
+   $execute = 1;
+}
+
 # List to be presented for user's choice
 my @list;
 
@@ -20,29 +32,45 @@ while (<>) {
 
 # The user will be asked to choose an item from the list
 # and the result will be printed
-print &getPick(\@list);
+my $ret_command = &getPick(\@list);
+print "$ret_command\n";
+
+if ($execute) {
+   system($ret_command);
+} elsif ($ask) {
+   print STDERR "Should I run the command for you? [N/y]\n";
+   open TTY2, '<', '/dev/tty';
+   my $choice = <TTY2>;
+   close TTY2;
+   if ($choice =~ /[yY]/) {
+      print "Running:\n\t$ret_command\n";
+      system($ret_command);
+   } else {
+      print "NOT running:\n\t$ret_command\n";
+   }
+}
+
 
 # Print an interactive choice from a given list
 sub getPick {
    my $ra_list = shift;
+   my $command;
    if ($#{$ra_list} > 0) {
         print STDERR "List:\n";
         for (my $i=0; $i <= $#{$ra_list}; $i++) {
            print STDERR ($i+1);
            print STDERR ") $$ra_list[$i]\n";
         }
-        print STDERR "Make your choice\n";
+        print STDERR "What do you want to do with this list? (e.g diff 1 3)\n";
         open TTY, '<', '/dev/tty';
-        my $choice = <TTY>;
+        $command = <TTY>;
         close TTY;
-        if ($choice =~ /\d+/) {
-           return $$ra_list[$choice-1];
-        }
-   } elsif ($#{$ra_list} == 0) {
-        return $$ra_list[0];
-   } else {
-        print STDERR "No list\n";
-   }
+        # Resolve any reference in the line
+        $command =~ s/\b(\d+)\b/$$ra_list[$1-1]/g; 
+    } else {
+        print STDERR "No choice made\n";
+   } 
+   return $command;
 }
 
 
