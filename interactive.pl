@@ -80,7 +80,7 @@ sub getPick {
            print STDERR ") $$ra_list[$i]\n";
         }
         print STDERR "Make your choice\n";
-        my $choice = <>;
+        my $choice = <STDIN>;
         if ($choice =~ /\d+/) {
            return $$ra_list[$choice-1];
         }
