@@ -108,7 +108,7 @@ sub get_copy_list {
         # Add to db, check the timestamp, only add if later than max timestamp in dba
         my @values = ($timestamp, $application, $contents, $type);
         print "($timestamp, $application, $contents, $type)\n";
-        my $sth = $dbh->do('INSERT INTO tbl_clips (timestamp, application,contents,type) VALUES (?,?,?,?)',undef, @values);
+        my $sth = $dbh->do('INSERT OR IGNORE INTO tbl_clips (timestamp, application,contents,type) VALUES (?,?,?,?)',undef, @values);
 	# Set the global max to the latest timestamp
         if ($timestamp > $max_ts) {
           $max_ts = $timestamp;
